@@ -1,0 +1,7 @@
+*.log
+*.bytes
+*.properties
+_STATIC/nexus.local/nexus-data/
+.vagrant
+.ovpn
+logs
