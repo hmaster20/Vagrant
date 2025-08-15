@@ -1,4 +1,17 @@
+# Структура проекта
 
+```shell
+wp-multi-test/
+├── Vagrantfile
+├── sites/
+│   ├── site1/                  # Стандартная установка WordPress
+│   │   └── wp-content/
+│   │       └── plugins/
+│   │           └── WpQuiz/     # ← ПЛАГИН (редактируем здесь)
+│   ├── site2/                  # Аналогично
+│   └── site3/                  # Аналогично
+└── docker-compose.yml          # Обновленная конфигурация
+```
 
 cd C:\WPmultiTest
 vagrant up
