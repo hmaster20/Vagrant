@@ -1,5 +1,6 @@
 logs
 _STATIC/nexus.local/nexus-data/
+_STATIC/slim-web.local/sites/
 *.log
 *.bytes
 *.properties
@@ -8,3 +9,4 @@ _STATIC/nexus.local/nexus-data/
 *.zip
 *.pem
 *.pfx
+*.pub
