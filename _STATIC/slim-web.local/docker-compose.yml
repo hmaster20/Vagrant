@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Общий MySQL 5.7 для всех сайтов
+  db:
+    image: mysql:5.7
+    container_name: wp_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wp_site1
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - wp_net
+
+  # Nginx как обратный прокси
+  nginx:
+    image: nginx:alpine
+    container_name: wp_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - wp_net
+
+  # Сайт 1
+  site1:
+    image: wordpress:6.8.2-php8.3-apache
+    container_name: wp_site1
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wp_site1
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://site1.webserver.local');
+        define('WP_SITEURL', 'http://site1.webserver.local');
+    volumes:
+      - /vagrant/sites/site1:/var/www/html
+      - site1_uploads:/var/www/html/wp-content/uploads
+    networks:
+      - wp_net
+
+  # Сайт 2 (аналогично site1)
+  site2:
+    image: wordpress:6.8.2-php8.3-apache
+    container_name: wp_site2
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wp_site2
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://site2.webserver.local');
+        define('WP_SITEURL', 'http://site2.webserver.local');
+    volumes:
+      - /vagrant/sites/site2:/var/www/html
+      - site2_uploads:/var/www/html/wp-content/uploads
+    networks:
+      - wp_net
+
+  # Сайт 3 (аналогично)
+  site3:
+    image: wordpress:6.8.2-php8.3-apache
+    container_name: wp_site3
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wp_site3
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://site3.webserver.local');
+        define('WP_SITEURL', 'http://site3.webserver.local');
+    volumes:
+      - /vagrant/sites/site3:/var/www/html
+      - site3_uploads:/var/www/html/wp-content/uploads
+    networks:
+      - wp_net
+
+volumes:
+  db_data:
+  site1_uploads:
+  site2_uploads:
+  site3_uploads:
+
+networks:
+  wp_net:
+    driver: bridge
