@@ -113,7 +113,7 @@ Vagrant.configure("2") do |config|
       # fix multipath daemon error
       machine.vm.provision "shell", path: "../../_shell/system/multipath_daemon.sh", run: "once"
       # fix (disable) auto upgrades
-      machine.vm.provision "shell", path: "../../_shell/disable_auto_upgrades.sh"
+      machine.vm.provision "shell", path: "../../_shell/system/disable_auto_upgrades.sh"
 
       # Install other tools
       machine.vm.provision "shell", path: "../../_shell/system/common_apt_u2004.sh"
