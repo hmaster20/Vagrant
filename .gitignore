@@ -5,9 +5,10 @@ _STATIC/slim-web.local/sites/
 *.log
 *.bytes
 *.properties
-.vagrant
 *.ovpn
 *.zip
 *.pem
 *.pfx
 *.pub
+.vagrant
+.ssh
