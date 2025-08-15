@@ -1,7 +1,10 @@
+logs
+_STATIC/nexus.local/nexus-data/
 *.log
 *.bytes
 *.properties
-_STATIC/nexus.local/nexus-data/
 .vagrant
-.ovpn
-logs
+*.ovpn
+*.zip
+*.pem
+*.pfx
