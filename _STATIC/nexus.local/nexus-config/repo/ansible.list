@@ -1,0 +1,4 @@
+deb http://nexus.local/repository/apt-ansible-ubuntu/ focal main
+
+# deb http://ppa.launchpad.net/ansible/ansible/ubuntu focal main
+# deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu focal main

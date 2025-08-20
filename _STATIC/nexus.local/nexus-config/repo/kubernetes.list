@@ -1,0 +1,3 @@
+deb http://nexus.local/repository/apt-kubernetes/ kubernetes-xenial main
+
+# deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
