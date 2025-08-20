@@ -1,0 +1,77 @@
+# https://faun.pub/deploy-sonatype-nexus-repository-oss-v3-with-docker-a50225fe661e
+# -----------------------------------------------
+
+# Если вы установите traefik.http.routers.nexus.tls, 
+# но не установите traefik.http.routers.nexus.tls.certresolver, 
+# Traefik будет использовать самоподписанный SSL по умолчанию.
+# Если вы не установите traefik.http.routers.nexus.entrypoints=websecure, 
+# traefik будет работать только через HTTP, а не через HTTPS.
+
+# -----------------------------------------------
+# Change NEXUS.mydomain.com with your domain name.
+# Change acme.email=MYEMAIL@gmail.com
+# -----------------------------------------------
+# 1. Create a volume directory for nexus-data. I used /nexus-data directory which is mount point of the second disk 
+#    mkdir /nexus-data
+# nexus user id 200 in dockerfile
+#    chown -R 200 /nexus-data
+# Create a letsencrypt directory to store traefik acme.json file which keeps SSL certs
+#    mkdir -p /docker/letsencrypt
+#    chmod 600 /docker/letsencrypt
+# Create a docker Network
+#    docker network create "nexus"
+# -----------------------------------------------
+
+# cat docker-compose.yml 
+
+version: '3.3'
+
+services:
+  traefik:
+    image: traefik:v2.2
+    container_name: traefik
+    restart: always
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=MYEMAIL@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - nexus
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/docker/letsencrypt:/letsencrypt"
+
+  nexus:
+    container_name: nexus
+    image: sonatype/nexus3
+    restart: always
+    networks:
+      - nexus
+    volumes:
+    - /nexus-data:/nexus-data
+    labels:
+      - traefik.port=8081
+      - traefik.http.routers.nexus.rule=Host(`NEXUS.mydomain.com`)
+      - traefik.enable=true
+      - traefik.http.routers.nexus.entrypoints=websecure
+      - traefik.http.routers.nexus.tls=true
+      - traefik.http.routers.nexus.tls.certresolver=myresolver
+
+networks:
+     nexus:
+        name: nexus
+        external: true
+
+# docker-compose up -d
