@@ -9,6 +9,7 @@ microk8s enable dns
 microk8s enable registry
 microk8s enable community
 microk8s enable ingress hostpath-storage
+# microk8s enable istio ingress hostpath-storage
 microk8s status
 sudo usermod -a -G microk8s ubuntu
 sudo chown -f -R ubuntu ~/.kube
