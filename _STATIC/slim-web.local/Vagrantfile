@@ -13,7 +13,7 @@ BOX_BASE = "ubuntu/focal64" # 20.04
 ADMIN_LOGIN = "ubuntu"
 ADMIN_PASS = "ubuntu"
 # ---------------------------------
-CPU_COUNT = "2"     # vCores 2 4
+CPU_COUNT = "4"     # vCores 2 4
 CPU_USAGE = "75"    # Percent usage 75 95
 RAM_SIZE = "3072"   # 1024 2048 3072 4096
 # ---------------------------------
@@ -118,6 +118,9 @@ Vagrant.configure("2") do |config|
       # Install other tools
       machine.vm.provision "shell", path: "../../_shell/system/common_apt_u2004.sh"
 
+      # APT init
+      machine.vm.provision "shell", path: "../../_shell/system/apt_init.sh"
+
       # Добавление подсветки Yaml в Nano
       machine.vm.provision "shell", path: "../../_shell/soft/nanorc_yaml.sh"
 
@@ -134,7 +137,7 @@ Vagrant.configure("2") do |config|
       machine.vm.provision "shell", path: "../../_shell/soft/helm.sh"
 
       # CertBot Let’s Encrypt
-      machine.vm.provision "shell", path: "../../_shell/soft/certbot.sh"
+      # machine.vm.provision "shell", path: "../../_shell/soft/certbot.sh"
 
       # View VM info
       machine.vm.provision "shell", path: "../../_shell/system/view_vm_info.sh", run: "always"

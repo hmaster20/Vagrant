@@ -37,21 +37,21 @@ services:
     container_name: wp_site1
     restart: always
     environment:
-      APACHE_SERVER_NAME: site1.webserver.local
+      APACHE_SERVER_NAME: localhost
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wpuser
       WORDPRESS_DB_PASSWORD: wppass
       WORDPRESS_DB_NAME: wp_site1
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://site1.webserver.local');
+        define('WP_SITEURL', 'http://site1.webserver.local');
     volumes:
       # 1. Монтируем ТОЛЬКО папку плагина (важно!)
       - /vagrant/sites/site1/wp-content/plugins/WpQuiz:/var/www/html/wp-content/plugins/WpQuiz
       # 2. Отдельно монтируем uploads (чтобы не терять медиафайлы)
       - site1_uploads:/var/www/html/wp-content/uploads
-      # Монтируем общий конфиг
-      - /vagrant/wp-config.php:/var/www/html/wp-config.php
-      - /vagrant/apache2/site1.conf:/etc/apache2/conf-enabled/servername.conf
-      - /vagrant/apache2/site1e.conf:/etc/apache2/sites-enabled/site1.conf
-      - /dev/null:/etc/apache2/sites-enabled/000-default.conf
+      # Монтируем конфиг
+      - /vagrant/sites/site3/wp-config.php:/var/www/html/wp-config.php
     networks:
       - wp_net
 
@@ -60,16 +60,18 @@ services:
     container_name: wp_site2
     restart: always
     environment:
-      APACHE_SERVER_NAME: site2.webserver.local
+      APACHE_SERVER_NAME: localhost
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wpuser
       WORDPRESS_DB_PASSWORD: wppass
       WORDPRESS_DB_NAME: wp_site2
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://site2.webserver.local');
+        define('WP_SITEURL', 'http://site2.webserver.local');
     volumes:
       - /vagrant/sites/site2/wp-content/plugins/WpQuiz:/var/www/html/wp-content/plugins/WpQuiz
       - site2_uploads:/var/www/html/wp-content/uploads
-      - /vagrant/wp-config.php:/var/www/html/wp-config.php
-      - /vagrant/apache2/site2.conf:/etc/apache2/conf-enabled/servername.conf
+      - /vagrant/sites/site2/wp-config.php:/var/www/html/wp-config.php
     networks:
       - wp_net
 
@@ -78,16 +80,18 @@ services:
     container_name: wp_site3
     restart: always
     environment:
-      APACHE_SERVER_NAME: site3.webserver.local
+      APACHE_SERVER_NAME: localhost
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wpuser
       WORDPRESS_DB_PASSWORD: wppass
       WORDPRESS_DB_NAME: wp_site3
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://site3.webserver.local');
+        define('WP_SITEURL', 'http://site3.webserver.local');
     volumes:
       - /vagrant/sites/site3/wp-content/plugins/WpQuiz:/var/www/html/wp-content/plugins/WpQuiz
       - site3_uploads:/var/www/html/wp-content/uploads
-      - /vagrant/wp-config.php:/var/www/html/wp-config.php
-      - /vagrant/apache2/site3.conf:/etc/apache2/conf-enabled/servername.conf
+      - /vagrant/sites/site3/wp-config.php:/var/www/html/wp-config.php
     networks:
       - wp_net
 
